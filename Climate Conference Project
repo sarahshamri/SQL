@@ -1,0 +1,59 @@
+-- Climate Conference Project 
+-- Database: https://www.db-fiddle.com/f/pxMci1sLL945KHKYvpe9W6/1
+-- 1. LEFT JOIN: Which VIPs are not attending the welcome party?
+
+SELECT v.first_name, v.last_name, r.welcome_rsvp
+FROM vips v
+LEFT JOIN reservations r ON v.member_id = r.member_id
+WHERE r.welcome_rsvp = 0;
+
+
+-- 2. INNER JOIN: Question: What are the full names and event titles for VIPs who are presenting?
+
+SELECT v.first_name, v.last_name, e.event_name
+FROM vips v
+INNER JOIN events e ON v.event = e.event_id;
+
+
+-- 3. MULTIPLE JOINS: What are the hotel names and addresses for each VIP, along with their event name?
+
+SELECT v.first_name, v.last_name, h.hotel_name, h.address, e.event_name
+FROM vips v
+INNER JOIN reservations r ON v.member_id = r.member_id
+INNER JOIN hotels h ON r.hotel = h.hotel_id
+INNER JOIN events e ON v.event = e.event_id;
+
+
+-- 4. SUBQUERY: Which VIPs are staying at the same hotel as 'Anika Patel'?
+
+SELECT v.first_name, v.last_name
+FROM vips v
+JOIN reservations r ON v.member_id = r.member_id
+WHERE r.hotel = (
+  SELECT r2.hotel
+  FROM vips v2
+  JOIN reservations r2 ON v2.member_id = r2.member_id
+  WHERE v2.first_name = 'Anika' AND v2.last_name = 'Patel'
+);
+
+
+-- 5. SELF JOIN: Show the name of each VIP and the name of the VIP they are providing feedback to.
+
+SELECT v1.first_name || ' ' || v1.last_name AS reviewer,
+       v2.first_name || ' ' || v2.last_name AS reviewee
+FROM vips v1
+JOIN vips v2 ON v1.provides_feedback_to = v2.member_id;
+
+
+-- 6. Which VIPs have been members since before the year 2000?
+
+SELECT first_name, last_name, member_since
+FROM vips
+WHERE member_since < 2000;
+
+
+-- 7. How many VIPs are associated with each type of organization?
+
+SELECT assoc_type, COUNT(*) AS total_vips
+FROM vips
+GROUP BY assoc_type;
