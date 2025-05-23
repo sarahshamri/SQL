@@ -1,0 +1,26 @@
+
+# Invoice of customers from Brazil 
+SELECT 
+    customers.FirstName || ' ' || customers.LastName AS CustomerName,
+    invoices.InvoiceId,
+    invoices.InvoiceDate,
+    invoices.BillingCountry
+FROM invoices
+JOIN customers ON invoices.CustomerId = customers.CustomerId
+WHERE customers.Country = 'Brazil';
+
+# All tracks with their album name, media type and genre 
+SELECT 
+    tracks.Name AS TrackName,
+    albums.Title AS AlbumName,
+    media_types.Name AS MediaType,
+    genres.Name AS Genre
+FROM tracks
+JOIN albums ON tracks.AlbumId = albums.AlbumId
+JOIN media_types ON tracks.MediaTypeId = media_types.MediaTypeId
+JOIN genres ON tracks.GenreId = genres.GenreId;
+
+# All customers not from the US
+SELECT * FROM chinook.customers
+WHERE Country !='USA';
+
